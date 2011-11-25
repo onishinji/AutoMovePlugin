@@ -1,0 +1,9 @@
+name: CameraManPlugin
+main: onishinji.AutoMovePlugin
+version: 1.0
+author: Onishinji
+
+commands:
+    am:
+        description: start 
+        usage: /am
