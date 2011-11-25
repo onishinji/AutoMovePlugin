@@ -53,9 +53,7 @@ public class AutoMovePlugin extends JavaPlugin {
             public void run() {
                 
                 // mouvement sur X
-                newLocation.setX(newLocation.getX() + 0.1);
-                System.out.println("Yaw" +newLocation.getYaw());
-                System.out.println("Pitch " + newLocation.getPitch());
+                newLocation.setX(newLocation.getX() + 0.1); 
                 
                 // mouvement de tete vers la droite
                 // valeur possible: 
@@ -153,17 +151,7 @@ public class AutoMovePlugin extends JavaPlugin {
         
         final double offetYaw = ((finalPos.getYaw()) - initPos.getYaw()) / nbEtapes;
         final double offsetPitch = (finalPos.getPitch() - initPos.getPitch()) / nbEtapes;
-        
-        player.sendMessage(initPos.toString());
-        player.sendMessage(finalPos.toString());
-
-        player.sendMessage("tu le fais en "  +nbEtapes + " étapes");
-        player.sendMessage("c'est à dire un décalage de "  +offsetX + " en X par étapes");
-        player.sendMessage("c'est à dire un décalage de "  +offsetY + " en Y par étapes");
-        player.sendMessage("c'est à dire un décalage de "  +offsetZ + " en Z par étapes");
-        player.sendMessage("c'est à dire un décalage de "  +offetYaw + " en Yaw par étapes");
-        player.sendMessage("c'est à dire un décalage de "  +offsetPitch + " en Pitch par étapes");
-        
+         
         
         // Variable temporaire
         Location oldLocation = player.getLocation();
@@ -180,7 +168,6 @@ public class AutoMovePlugin extends JavaPlugin {
             public void run() {
                 
                 nbCurrentEtape--;
-                System.out.println("Encore " + nbCurrentEtape +" étape sur " + nbEtapes);
                 
                 if(nbCurrentEtape <= 0)
                 {
@@ -196,9 +183,6 @@ public class AutoMovePlugin extends JavaPlugin {
                 
                 newLocation.setPitch((float) (newLocation.getPitch() + offsetPitch));
                 newLocation.setYaw((float) (newLocation.getYaw() + offetYaw));
-                
-                System.out.println("Yaw" +newLocation.getYaw());
-                System.out.println("Pitch " + newLocation.getPitch());
                 
                 // mouvement de tete vers la droite
                 // valeur possible: 
