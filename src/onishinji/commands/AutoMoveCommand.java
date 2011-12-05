@@ -69,6 +69,35 @@ public class AutoMoveCommand implements CommandExecutor {
         {
             plugin.cancelAnimate(player);
         }
+        
+        
+        if(cmd.equals("info"))
+        {
+            String playerName = "";
+            Player playerInfo = null;
+            if(args.length == 2)
+            {
+                playerName = args[1];
+            }
+            else
+            {
+                playerName = player.getName();
+            }
+            
+            for(Player currentP : player.getWorld().getPlayers())
+            {
+                if(currentP.getName().toLowerCase().equals(playerName.toLowerCase()))
+                {
+                    playerInfo = currentP;
+                }
+            }
+            
+            if(playerInfo != null)
+            {
+                plugin.getInfoFor(playerInfo, player);
+            }
+            
+        }
 
 
         if(cmd.equals("line"))
@@ -87,7 +116,7 @@ public class AutoMoveCommand implements CommandExecutor {
         
        
     
-        return false;
+        return true;
     }
 
 }

@@ -19,6 +19,8 @@ public class AutoMovePlugin extends JavaPlugin {
     HashMap<Player, Timer> timerPlayer;
     
     HashMap<Player, ArrayList<Location>> registerUser;
+    
+    HashMap<Player, AutoMoveInfo> playerAutoMoved;
 
     @Override
     public void onDisable() {
@@ -33,6 +35,7 @@ public class AutoMovePlugin extends JavaPlugin {
         
         this.registerUser = new HashMap<Player, ArrayList<Location>>();
         this.timerPlayer = new HashMap<Player, Timer>();
+        this.playerAutoMoved = new HashMap<Player, AutoMoveInfo>();
 
         getCommand("am").setExecutor(new  AutoMoveCommand(this, true)); 
         t = new Timer();
@@ -107,6 +110,21 @@ public class AutoMovePlugin extends JavaPlugin {
         return this.timerPlayer.get(player);
     }
     
+    public AutoMoveInfo getPlayerAutoMoved(Player player)
+    {
+        if(!(this.playerAutoMoved.get(player) != null))
+        {
+            this.playerAutoMoved.put(player, new AutoMoveInfo());    
+        }
+        
+        return this.playerAutoMoved.get(player);
+    }
+    
+    public void updatePlayerAutoMoved(Player player, AutoMoveInfo info)
+    {
+        this.playerAutoMoved.put(player, info);
+    }
+    
     public boolean playerCanBeAnimated(Player player)
     {
         return this.getLocations(player).size() == 2;
@@ -122,7 +140,7 @@ public class AutoMovePlugin extends JavaPlugin {
         player.sendMessage(ChatColor.GREEN + "Tu viens de définir le second point du déplacement");
     }
 
-    public void startLineAnimation(Player player, String intervalTp, String dureTotale) {
+    public void startLineAnimation(final Player player, String intervalTp, String dureTotale) {
         // TODO Auto-generated method stub
         
         if(!this.playerCanBeAnimated(player))
@@ -135,6 +153,13 @@ public class AutoMovePlugin extends JavaPlugin {
        
         // nombre d'étape
         final long nbEtapes = LadurédelavidéoEnMinute * 60 / intervalDeTempsEntreLesTp;
+        
+        
+        AutoMoveInfo info = this.getPlayerAutoMoved(player);
+        info.setNbTotalSteps((int) nbEtapes);   
+        this.updatePlayerAutoMoved(player, info);
+        
+        
         
         // Téléporte le player à la 1er coordonée
         ArrayList<Location> positions = this.getLocations(player);        
@@ -169,8 +194,15 @@ public class AutoMovePlugin extends JavaPlugin {
                 
                 nbCurrentEtape--;
                 
+                AutoMoveInfo info = getPlayerAutoMoved(player);
+                info.setCurrentStep((int) (info.getNbTotalSteps() - nbCurrentEtape));   
+                updatePlayerAutoMoved(player, info);
+                
                 if(nbCurrentEtape <= 0)
                 {
+                    info = new AutoMoveInfo();   
+                    updatePlayerAutoMoved(player, info);                    
+                    
                     this.cancel();
                 }
                 
@@ -208,6 +240,27 @@ public class AutoMovePlugin extends JavaPlugin {
         // TODO Auto-generated method stub 
         t  = this.getTimer(player, false);      
         t.cancel();
+
+        AutoMoveInfo info = new AutoMoveInfo();   
+        updatePlayerAutoMoved(player, info);     
+    }
+
+    public void getInfoFor(Player playerMoved, Player player) {
+        
+        AutoMoveInfo info = this.getPlayerAutoMoved(playerMoved);
+        
+        if(info.getNbTotalSteps() > 1)
+        {   
+            player.sendMessage(ChatColor.GREEN + "Il y a " + info.getNbTotalSteps() + " étapes à faire");        
+            player.sendMessage(ChatColor.GREEN + "On est à l'étape numéro " + info.getCurrentStep());        
+            player.sendMessage(ChatColor.GREEN + "Ce qui donne un pourcentage de réalisation de " + info.getCurrentPourcent());        
+        }
+        else
+        {
+            player.sendMessage("Tu n'est pas en mode AutoMove");   
+        }
+        
+         
     }
 
 }
