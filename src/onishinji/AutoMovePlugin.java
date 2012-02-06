@@ -201,19 +201,7 @@ public class AutoMovePlugin extends JavaPlugin {
 
                 newLocation.setPitch((float) (newLocation.getPitch() + offsetPitch));
                 newLocation.setYaw((float) (newLocation.getYaw() + offetYaw));
-
-                // mouvement de tete vers la droite
-                // valeur possible:
-                // -90(sud)
-                // -180 (est)
-                // 180 (ouest)
-                // 90(orienté nord)
-                // newLocation.setYaw((float) (newLocation.getYaw()+0.1));
-
-                // mouvement de tete vers le bas, valeur compris entre -90 (vers
-                // le haut du ciel)
-                // et +90 tu mattes tes pieds
-                // newLocation.setPitch((float) (newLocation.getPitch()+0.1));
+ 
                 player2.teleport(newLocation);
 
             }
@@ -270,12 +258,7 @@ public class AutoMovePlugin extends JavaPlugin {
 
         final Location pointCentre = new Location(pointARegarder.getWorld(), pointARegarder.getX(), pointEnd.getY(), pointARegarder.getZ());
 
-        // picth ini
- 
-        System.out.println("pointARegarder " + pointARegarder);
-        System.out.println("pointCentre " + pointCentre);
-        System.out.println("pointEnd " + pointEnd);
-          
+        // picth ini          
         final double rayon = getNorme(pointEnd, pointCentre);
         double anglePitch;       
         
@@ -321,9 +304,7 @@ public class AutoMovePlugin extends JavaPlugin {
             double angle = (long) angleDepart;
 
             public void run() {
-
-         //       System.out.println(" ");
-        //        System.out.println(" ");
+                
                 nbCurrentEtape--;
 
                 AutoMoveInfo info = getPlayerAutoMoved(player);
@@ -344,47 +325,9 @@ public class AutoMovePlugin extends JavaPlugin {
                 newLocation.setX(currentX);
 
                 // mouvement sur Z
-                newLocation.setZ(curentZ);
- /*
-                double test2;
-                
-                Vector v1 = getVectorFromPoint(newLocation, pointEnd);
-                Vector v0 = getVectorFromPoint(player2.getLocation(), pointEnd);
-                
-                test2 = Math.toDegrees(v0.angle(v1));
-                
-                
-
-                System.out.println("Ancien courant: " + v0);
-                System.out.println("Point courant " + v1);
-                System.out.println("test2 courant: " + test2);*/
+                newLocation.setZ(curentZ); 
 
                 newLocation.setYaw((float) getYaw(newLocation, pointARegarder));
-                 
-
-                // newLocation.setPitch((float) (newLocation.getPitch() +
-                // offsetPitch));
-                // newLocation.setYaw((float) (newLocation.getYaw() +
-                // offetYaw));
-
-                // ///////////////
-                // YAW
-                // ///////////////
-                // mouvement de tete vers la droite
-                // valeur possible:
-                // -90(sud)
-                // -180 (est)
-                // 0 (ouest)
-                // 90(orienté nord)
-                // newLocation.setYaw((float) (newLocation.getYaw()+0.1));
-
-                // ///////////////
-                // PITCH
-                // ///////////////
-                // mouvement de tete vers le bas, valeur compris entre -90 (vers
-                // le haut du ciel)
-                // et +90 tu mattes tes pieds
-                // newLocation.setPitch((float) (newLocation.getPitch()+0.1));
                 player2.teleport(newLocation);
 
                 angle = angle + vitesseRadSeconde;
@@ -435,38 +378,31 @@ public class AutoMovePlugin extends JavaPlugin {
         
         Vector vecteurVersOrigine = getVectorFromPoint( new Location(pointEnd.getWorld(),0, 0, 0),  new Location(pointARegarder.getWorld(), 0, 0, 1));
         Vector v0 = getVectorFromPoint( new Location(pointEnd.getWorld(), pointEnd.getX(), 0, pointEnd.getZ()),  new Location(pointARegarder.getWorld(), pointARegarder.getX(), 0, pointARegarder.getZ()));
-        double test2 = Math.toDegrees(v0.angle(vecteurVersOrigine));
-     //   System.out.println("Angle entre ces vecteurs " + test2); 
+        double test2 = Math.toDegrees(v0.angle(vecteurVersOrigine)); 
         
         double tx = v0.getX() - vecteurVersOrigine.getX();
-        double tz = v0.getZ() - vecteurVersOrigine.getZ();
-   //     System.out.println("diff X " + tx); 
-    //    System.out.println("diff Z " + tz); 
+        double tz = v0.getZ() - vecteurVersOrigine.getZ(); 
         
 
         if(tz > 0 && tx > 0)
-        {
-       //     System.out.println(" ++ ?");
+        { 
             test2 = -test2;
         } 
         
 
         if(tz < 0 && tx > 0)
-        {
-     //       System.out.println(" -+");
+        { 
             test2 = -test2;
         }
 
         if(tz > 0 && tx < 0)
         {
-   //         System.out.println(" negatif ?");
             test2 = test2;
         }
          
         
         if(tz < 0 && tx < 0)
         {
-            System.out.println(" ?");
             test2 = test2;
         }
         
