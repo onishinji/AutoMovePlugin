@@ -39,7 +39,10 @@ public class AutoMoveCommand implements CommandExecutor {
         {
             player.sendMessage(ChatColor.RED + "usage: /am start");
             player.sendMessage(ChatColor.RED + "usage: /am stop");
+            player.sendMessage(ChatColor.RED + "usage: /am cancel");
+            player.sendMessage(ChatColor.RED + "usage: /am info PLAYERNAME");
             player.sendMessage(ChatColor.RED + "usage: /am line intervaleDeTempsEntreLesTpEnSeconde laDuréDeLaVidoEnMinute");
+            player.sendMessage(ChatColor.RED + "usage: /am rotate laDuréDeLaVidoEnMinute vitesseAngulaire");
             
             return false;
         }
@@ -61,7 +64,13 @@ public class AutoMoveCommand implements CommandExecutor {
 
         if(cmd.equals("debug"))
         {
+            
+            double yawDepart = (player.getLocation().getYaw() + 180 + 360) % 360;
+            System.out.println("YawPlayer " + player.getLocation().getYaw()); 
+            System.out.println("YamCompass " + yawDepart); 
+            
             player.sendMessage(player.getLocation().toString());
+            plugin.debug(player);
         }
         
 
@@ -114,6 +123,21 @@ public class AutoMoveCommand implements CommandExecutor {
             plugin.startLineAnimation(player, intervalTp, dureTotale);
         }
         
+
+        if(cmd.equals("rotate"))
+        { 
+            if(args.length != 3)
+            {
+                player.sendMessage(ChatColor.RED + "Usage: /am rotate laDuréDeLaVidoEnMinute vitesseAngulaire");
+                player.sendMessage(ChatColor.RED + " " + args.length);
+                return false;
+            }
+            
+            String dureTotale = args[1];
+            String vitesseAngulaire = args[2];
+             
+            plugin.startRotateAnimation(player, dureTotale, vitesseAngulaire);
+        }
        
     
         return true;
